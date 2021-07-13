@@ -442,7 +442,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             if (nextMark.equals("Start")) {
-                destMark = theMarks.getNextMark("A");
+                destMark = theMarks.getNextMark("StartFin");
                 mNextMarkTextView.setTextColor(getResources().getColor(R.color.red));
                 mNextMarkTextView.setBackgroundColor(getResources().getColor(R.color.button_background));
                 mNextMarkTextView.setTypeface(mNextMarkTextView.getTypeface(), Typeface.BOLD);

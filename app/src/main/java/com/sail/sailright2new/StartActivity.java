@@ -103,15 +103,22 @@ public class StartActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        // Create the Start object here, and pass in 'A' Mark, and 'H' Mark
-        String a = "A"; // Start line data
-        String h = "H"; // Start Line Data
-        Location aMark = theMarks.getNextMark(a);
-        Location hMark = theMarks.getNextMark(h);
-        Location firstMark = theMarks.getNextMark(firstMarkName);
-        // Should have A Mark, H Mark to create the Start Line Object
-        theLine = new StartLine(aMark, hMark, firstMark);
+//        // Create the Start object here, and pass in 'A' Mark, and 'H' Mark
+//        String a = "A"; // Start line data
+//        String h = "H"; // Start Line Data
+        Location mClubLine = theMarks.getNextMark("StartFin");
+        Location mHallmark = theMarks.getNextMark("Hallmark");
+//        Location firstMark = theMarks.getNextMark(firstMarkName);
+//        // Should have A Mark, H Mark to create the Start Line Object
+//        theLine = new StartLine(aMark, hMark, firstMark);
 
+        if (startCourse.contains("Mid")) {
+            startMark = "Hallmark";
+            destMark = mHallmark;
+        } else {
+            startMark = "Club Start";
+            destMark = mClubLine;
+        }
         // Create theCalculator object for processing data readings
         theCalculator = new Calculator();
 
@@ -169,9 +176,9 @@ public class StartActivity extends AppCompatActivity {
         distToDevice = deviceOffset * Math.sin(Math.toRadians(approachAngle));
 
         // Create the start line
-        theLine = new StartLine(aMark, hMark, firstMark);
+//        theLine = new StartLine(aMark, hMark, firstMark);
 
-        StartDisplay(startCourse, startMark + " Mark");
+        StartDisplay(startCourse, startMark);
         updateGPS();
         showClock(timeToStart);
         startLocationUpdates();
@@ -219,19 +226,6 @@ public class StartActivity extends AppCompatActivity {
      */
     private void updateLocationData(Location mCurrentLocation) {
         if (mCurrentLocation != null) {
-
-            startMark = theLine.getStartTarget(mCurrentLocation);
-
-            if (startMark.equals("Line")) {
-                // Insert the finish line crossing point
-                startNextMarkTextView.setText(startMark);
-                destMark = theLine.getStartPoint(mCurrentLocation);
-                approachAngle = Math.abs(theLine.getApproachAngle());
-            } else {
-                // Set the next mark to either A or H
-                startNextMarkTextView.setText("Start - " + startMark + " Mark");
-                destMark = theMarks.getNextMark(startMark);
-            }
 
         // Process gps data for display on UI
             mSpeed = mCurrentLocation.getSpeed();
