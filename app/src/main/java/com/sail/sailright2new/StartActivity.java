@@ -348,12 +348,6 @@ public class StartActivity extends AppCompatActivity {
                 if (alarmStart) {
                     playSounds("shotgun");
                 }
-                double timeToLine = (theLine.getShortestDist() - distToDevice) / mSmoothSpeed;
-                if (timeToLine > startMargin) {
-                    if (alarmBadStart) {
-                        playSounds("fail");
-                    }
-                }
                 mClockTextView.setText("* GO ! *");
                 finish();
             }
@@ -387,10 +381,6 @@ public class StartActivity extends AppCompatActivity {
         }
         if (sound.equals("shotgun")) {
             final MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.shotgun);
-            mediaPlayer.start();
-        }
-        if (sound.equals("fail")) {
-            final MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.fail);
             mediaPlayer.start();
         }
     }
