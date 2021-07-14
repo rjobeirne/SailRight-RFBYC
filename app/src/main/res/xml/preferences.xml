@@ -41,13 +41,7 @@
             android:key="@string/prefs_default_start_time"
             android:summary="@string/default_start_time_desc"
             android:title="@string/default_start_time"
-            android:defaultValue="15" />
-
-        <EditTextPreference
-            android:key="@string/prefs_start_margin"
-            android:summary="@string/acceptable_start_margin_desc"
-            android:title="@string/acceptable_start_margin"
-            android:defaultValue="15"  />
+            android:defaultValue="5" />
 
         </PreferenceCategory>
 
@@ -72,11 +66,6 @@
             android:defaultValue="true"
             android:key="@string/prefs_finish"
             android:title="@string/finish_whoop" />
-
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="@string/prefs_bad_start"
-            android:title="@string/bad_start" />
 
         </PreferenceCategory>
 

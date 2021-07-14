@@ -38,7 +38,6 @@ public class StartActivity extends AppCompatActivity {
 
     // Define the classes
     Marks theMarks;
-    StartLine theLine;
     Calculator theCalculator = null;
 
     TextView startCourseTextView, startNextMarkTextView;
@@ -87,8 +86,6 @@ public class StartActivity extends AppCompatActivity {
         mDistanceTextView = findViewById(R.id.distance_text);
         mDistanceUnitTextView = findViewById(R.id.dist_unit);
         mBearingTextView = findViewById(R.id.bearing_text);
-        mTimeVarianceTextView = findViewById(R.id.start_time_early_late);
-        mEarlyLateTextView = findViewById(R.id.start_time_early_late_title);
         mTimeToMarkTextView = findViewById(R.id.time_to_line);
         mAccuracyTextView = findViewById(R.id.accuracy_text);
         mClockTextView = findViewById(R.id.time_to_start);
@@ -103,14 +100,8 @@ public class StartActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-//        // Create the Start object here, and pass in 'A' Mark, and 'H' Mark
-//        String a = "A"; // Start line data
-//        String h = "H"; // Start Line Data
         Location mClubLine = theMarks.getNextMark("StartFin");
         Location mHallmark = theMarks.getNextMark("Hallmark");
-//        Location firstMark = theMarks.getNextMark(firstMarkName);
-//        // Should have A Mark, H Mark to create the Start Line Object
-//        theLine = new StartLine(aMark, hMark, firstMark);
 
         if (startCourse.contains("Mid")) {
             startMark = "Hallmark";
@@ -165,18 +156,14 @@ public class StartActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         deviceOffset = Integer.parseInt(sharedPreferences.getString("prefs_bot_to_gps", "10"));
         timeToStart = 60 * Integer.parseInt(sharedPreferences.getString
-               ("prefs_default_start_time", "15"));
+               ("prefs_default_start_time", "5"));
         startMargin = Integer.parseInt(sharedPreferences.getString("prefs_start_margin", "15"));
         smoothSpeedFactor = Integer.parseInt(sharedPreferences.getString("prefs_speed_smooth", "4"));
         smoothHeadFactor = Integer.parseInt(sharedPreferences.getString("prefs_heading_smooth", "4"));
         alarmMinute = sharedPreferences.getBoolean("prefs_mins_airhorn", Boolean.parseBoolean("TRUE"));
         alarmStart = sharedPreferences.getBoolean("prefs_start_gun", Boolean.parseBoolean("TRUE"));
-        alarmBadStart = sharedPreferences.getBoolean("prefs_bad_start", Boolean.parseBoolean("TRUE"));
 
         distToDevice = deviceOffset * Math.sin(Math.toRadians(approachAngle));
-
-        // Create the start line
-//        theLine = new StartLine(aMark, hMark, firstMark);
 
         StartDisplay(startCourse, startMark);
         updateGPS();
@@ -270,20 +257,7 @@ public class StartActivity extends AppCompatActivity {
         mDistanceTextView.setText(displayDistToMark);
         mDistanceUnitTextView.setText(distUnits);
         mBearingTextView.setText(String.format("%03d", displayBearingToMark));
-        mTimeVarianceTextView.setText(displayTimeVariance);
         mTimeToMarkTextView.setText(ttmDisplay);
-        mAccuracyTextView.setText(accuracy);
-
-        if (timeliness.equals("Late")) {
-            mTimeVarianceTextView.setTextColor(getResources().getColor(R.color.app_red));
-            mEarlyLateTextView.setText("Late");
-            mEarlyLateTextView.setTextColor(getResources().getColor(R.color.app_red));
-        }
-        if (timeliness.equals("Early")) {
-            mTimeVarianceTextView.setTextColor(getResources().getColor(R.color.app_green));
-            mEarlyLateTextView.setText("Early");
-            mEarlyLateTextView.setTextColor(getResources().getColor(R.color.app_green));
-        }
     }
 
     public void time_plus(View view) {

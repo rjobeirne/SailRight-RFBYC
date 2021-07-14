@@ -55,8 +55,6 @@ public class SettingsActivity extends AppCompatActivity {
                     getPreferenceManager().findPreference("prefs_heading_smooth");
             androidx.preference.EditTextPreference editTextPreference5 =
                     getPreferenceManager().findPreference("prefs_proximity_dist");
-            androidx.preference.EditTextPreference editTextPreference6 =
-                    getPreferenceManager().findPreference("prefs_start_margin");
 
             editTextPreference1.setOnBindEditTextListener(
                     new androidx.preference.EditTextPreference.OnBindEditTextListener() {
@@ -91,14 +89,6 @@ public class SettingsActivity extends AppCompatActivity {
             });
 
             editTextPreference5.setOnBindEditTextListener(
-                    new androidx.preference.EditTextPreference.OnBindEditTextListener() {
-                @Override
-                public void onBindEditText(@NonNull EditText editText) {
-                    editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-                }
-            });
-
-            editTextPreference6.setOnBindEditTextListener(
                     new androidx.preference.EditTextPreference.OnBindEditTextListener() {
                 @Override
                 public void onBindEditText(@NonNull EditText editText) {
