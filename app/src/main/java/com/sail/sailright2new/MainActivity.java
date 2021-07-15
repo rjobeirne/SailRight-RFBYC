@@ -92,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
     Courses theCourses = null;
 
     // Define the other classes
-    FinishLine theFinish = null;
     StartActivity theStart = null;
     Calculator theCalculator = null;
 
@@ -114,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
     int bearingVariance;
     boolean flagFinish = FALSE;
     boolean flagStart = FALSE;
+    boolean flagRaceFinished = FALSE;
 
     String displayDistToMark;
     String ttmDisplay;
@@ -122,22 +122,15 @@ public class MainActivity extends AppCompatActivity {
     int posMark = 0;
     int posCourse = 0;
     int listMarkSize, listCourseSize;
-    String lastMarkName = null;
+//    String lastMarkName = null;
     String raceCourse;
     String nextRounding = "A";
     ArrayList courseMarks, markRounding;
     String courseDist;
     Boolean flagMarkExtra;
 
-    int deviceOffset,smoothSpeedFactor, smoothHeadFactor, distMarkProximity;
+    int smoothSpeedFactor, smoothHeadFactor, distMarkProximity;
     Boolean autoAdvance, alarmProx, alarmFinish;
-
-    int directionFactor;
-    Location aMark, hMark, lastMark, finishPoint;
-    Double distToFinish;
-
-    final String a = "A"; // Finish line data
-    final String h = "H"; // Finish Line Data
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -207,7 +200,6 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
-
 
         // set all properties of LocationRequest
         locationRequest = new LocationRequest();
@@ -286,7 +278,6 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         // Get settings from preferences
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        deviceOffset = Integer.parseInt(sharedPreferences.getString("prefs_bot_to_gps", "10"));
         smoothSpeedFactor = Integer.parseInt(sharedPreferences.getString("prefs_speed_smooth", "4"));
         if ( smoothSpeedFactor > 20) {
             smoothSpeedFactor = 20;
@@ -337,6 +328,8 @@ public class MainActivity extends AppCompatActivity {
         } else {
             posCourse = posCourse + 1;
         }
+        posMark = 0;
+        flagRaceFinished = FALSE;
         setCourse();
         setNextMark();
     }
@@ -348,6 +341,8 @@ public class MainActivity extends AppCompatActivity {
         } else {
             posCourse = posCourse - 1;
         }
+        posMark = 0;
+        flagRaceFinished = FALSE;
         setCourse();
         setNextMark();
     }
@@ -398,6 +393,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             posMark = posMark + 1;
         }
+        flagRaceFinished = FALSE;
         flagFinish = FALSE;
         finMark = "race";
         setNextMark();
@@ -414,6 +410,7 @@ public class MainActivity extends AppCompatActivity {
                 posMark = posMark - 1;
             }
         }
+        flagRaceFinished = FALSE;
         flagFinish = FALSE;
         finMark = "race";
         setNextMark();
@@ -423,9 +420,9 @@ public class MainActivity extends AppCompatActivity {
      * Set next destination mark
      */
     public void setNextMark() {
-        if (!flagFinish) {
+        if (!flagFinish && !flagRaceFinished) {
 
-            if (raceCourse.equals("RMYS")) {
+            if (raceCourse.equals("RFBYC")) {
                 listMarkSize = theMarks.marks.size();
                 nextMark = theMarks.marks.get(posMark).getmarkName();
 
@@ -489,18 +486,8 @@ public class MainActivity extends AppCompatActivity {
             // Check to see if next mark is not the finish
             if (nextMark.equals("Finish")) {
                 mNextMarkTextView.setBackgroundColor(getResources().getColor(R.color.white));
-                // Identify the last mark to determine the direction of approach
                 flagFinish = TRUE;
-                lastMarkName = (String) courseMarks.get(listMarkSize - 2);
-
-                // Should have A Mark, H Mark to create the Finish Line Object
-                aMark = theMarks.getNextMark(a);
-                hMark = theMarks.getNextMark(h);
-                lastMark = theMarks.getNextMark(lastMarkName);
-                theFinish = new FinishLine(aMark, hMark, lastMark);
-
-                // Find the direction of approach to the finish line
-                directionFactor = theFinish.getFinishDirection();
+                destMark = theMarks.getNextMark("StartFin");
             } else {
                 // Not the finish, set the next mark normally
                 // unless it is the start in which case leave it as A Mark
@@ -541,24 +528,9 @@ public class MainActivity extends AppCompatActivity {
             setNextMark();
         }
 
-        if (flagFinish) {
-            // Find the the target point on the finish line (A Mark, H Mark or Line)
-            // Pass in the currentLocation
-            finMark = theFinish.getFinishTarget(mCurrentLocation);
-
-            if (finMark.equals("Line")) {
-                // Insert the finish line crossing point
-                mNextMarkTextView.setText(finMark);
-                destMark = theFinish.getFinishPoint(mCurrentLocation);
-                finishPoint = destMark;
-            } else {
-                // Set the next mark to either A or H
-                mNextMarkTextView.setText("Fin - " + finMark + " Mark");
-                destMark = theMarks.getNextMark(finMark);
-            }
-        }
-
-        if (mCurrentLocation != null && !flagStart) {
+        if (mCurrentLocation != null
+                && !flagStart
+                && !flagRaceFinished) {
 
             // Process gps data for display on UI
             mSpeed = mCurrentLocation.getSpeed();
@@ -595,7 +567,10 @@ public class MainActivity extends AppCompatActivity {
 
             if (distToMark < distMarkProximity
                     && finMark.equals("race")
-                    && autoAdvance) {
+                    && autoAdvance
+                    && !flagFinish
+                    && !flagRaceFinished
+                    && !nextMark.equals("Start")) {
                 posMark = posMark + 1;
                 setNextMark();
                 if (alarmProx) {
@@ -603,26 +578,22 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
-            if (flagFinish && finishPoint != null) {
-            // Calculate distance in metres to finish point from latitude
-                double approachAngle = Math.abs(theFinish.getApproachAngle());
-                double distToDevice = deviceOffset * Math.sin(Math.toRadians(approachAngle));
-                distToFinish = (mCurrentLocation.getLatitude() - finishPoint.getLatitude()) * directionFactor * 60 * 1852;
-                displayDistToMark = theCalculator.getDistScale(distToFinish);
-                if (distToFinish < distToDevice) {
+            if (flagFinish && destMark != null) {
+                if (mCurrentLocation.getLatitude() > destMark.getLatitude()) {
                     if (alarmFinish) {
                         playSounds("whoop");
                     }
                     mNextMarkTextView.setText(R.string.finished);
                     flagFinish = FALSE;
-                    posMark = 0;
+                    flagRaceFinished = TRUE;
+                    return;
                 }
             }
             updateLocationUI();
         }
     }
 
-    private void updateLocationUI() {
+     private void updateLocationUI() {
         // Send info to UI
         mSpeedTextView.setText(speedDisplay);
         mHeadingTextView.setText(displayHeading);

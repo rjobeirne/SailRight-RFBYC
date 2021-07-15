@@ -258,6 +258,7 @@ public class StartActivity extends AppCompatActivity {
         mDistanceUnitTextView.setText(distUnits);
         mBearingTextView.setText(String.format("%03d", displayBearingToMark));
         mTimeToMarkTextView.setText(ttmDisplay);
+        mAccuracyTextView.setText(accuracy);
     }
 
     public void time_plus(View view) {

@@ -64,14 +64,6 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             });
 
-            editTextPreference2.setOnBindEditTextListener(
-                    new androidx.preference.EditTextPreference.OnBindEditTextListener() {
-                @Override
-                public void onBindEditText(@NonNull EditText editText) {
-                    editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-                }
-            });
-
             editTextPreference3.setOnBindEditTextListener(
                     new androidx.preference.EditTextPreference.OnBindEditTextListener() {
                 @Override

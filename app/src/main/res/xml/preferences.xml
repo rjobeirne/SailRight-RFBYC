@@ -4,12 +4,6 @@
         <PreferenceCategory android:title="Boat">
 
                 <EditTextPreference
-                    android:key="@string/prefs_bow_to_gps"
-                    android:summary="@string/bow_to_gps_desc"
-                    android:title="@string/bow_to_gps"
-                    android:defaultValue="9" />
-
-                <EditTextPreference
                     android:key="@string/prefs_speed_smooth"
                     android:summary="@string/speed_smooth_desc"
                     android:title="@string/speed_smooth"
