@@ -102,13 +102,19 @@ public class StartActivity extends AppCompatActivity {
 
         Location mClubLine = theMarks.getNextMark("StartFin");
         Location mHallmark = theMarks.getNextMark("Hallmark");
+        Location mDome = theMarks.getNextMark("Dome");
 
-        if (startCourse.contains("Mid")) {
-            startMark = "Hallmark";
-            destMark = mHallmark;
-        } else {
+        if ( startCourse.contains("Club")) {
             startMark = "Club Start";
             destMark = mClubLine;
+        } else {
+            if (startCourse.contains("Mid 1")) {
+                startMark = "Hallmark";
+                destMark = mHallmark;
+            } else {
+                startMark = "Dome";
+                destMark = mDome;
+            }
         }
         // Create theCalculator object for processing data readings
         theCalculator = new Calculator();
