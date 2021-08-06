@@ -1,4 +1,4 @@
-package com.sail.sailright2new;
+package com.sail.sailrightrfbyc;
 
 import android.location.Location;
 import android.os.Environment;

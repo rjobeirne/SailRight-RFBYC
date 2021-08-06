@@ -20,7 +20,7 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name="com.sail.sailright2new.MainActivity"
+            android:name="com.sail.sailrightrfbyc.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation"
             android:screenOrientation="sensorLandscape"
@@ -33,7 +33,7 @@
         </activity>
 
         <activity
-            android:name="com.sail.sailright2new.StartActivity"
+            android:name="com.sail.sailrightrfbyc.StartActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation"
             android:screenOrientation="sensorLandscape"
