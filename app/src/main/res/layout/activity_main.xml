@@ -307,13 +307,26 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <TextView
+        android:id="@+id/time_title"
+        android:layout_width="72dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/time"
+        android:textColor="@color/titles"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/time_text"
+        app:layout_constraintEnd_toEndOf="@+id/time_text"
+        app:layout_constraintStart_toStartOf="@id/time_text" />
+
     <TextClock
         android:id="@+id/time_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:gravity="center"
-        android:format24Hour="hh:mm:ss"
+        android:format24Hour="HH:mm:ss"
+        android:format12Hour="hh:mm:ss"
         android:text="@string/clock_time"
         android:textColor="@color/normal_text"
         android:textSize="40sp"
@@ -349,6 +362,18 @@
         app:layout_constraintEnd_toStartOf="@+id/time_to_mark"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/time_text" />
+
+    <TextView
+        android:id="@+id/eta_title"
+        android:layout_width="72dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/eta"
+        android:textColor="@color/titles"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/time_to_mark"
+        app:layout_constraintEnd_toEndOf="@+id/time_to_mark"
+        app:layout_constraintStart_toStartOf="@id/time_to_mark" />
 
     <TextView
         android:id="@+id/time_to_mark"
